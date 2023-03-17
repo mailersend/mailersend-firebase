@@ -1,0 +1,150 @@
+name: mailersend-firebase
+version: 0.0.1
+specVersion: v1beta
+
+displayName: Send email with MailerSend
+
+description: >-
+  Send transactional emails using MailerSend.
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/mailersend/firebase-ext
+releaseNotesUrl: https://github.com/mailersend/firebase-ext/CHANGELOG.md
+
+author:
+  authorName: MailerSend
+  url: https://www.mailersend.com
+
+contributors:
+  - authorName: Ramunas Pabreza
+    email: ramunas@mailerlite.com
+
+billingRequired: true
+
+resources:
+  - name: processDocumentCreated
+    type: firebaseextensions.v1beta.function
+    description: >-
+      Processes created document in Cloud Firestore collection, sends an email and updates status information.
+    properties:
+      location: ${LOCATION}
+      runtime: "nodejs16"
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.create
+        resource: projects/${PROJECT_ID}/databases/(default)/documents/${EMAIL_COLLECTION}/{documentId}
+
+params:
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension?
+      For help selecting a location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    required: true
+    immutable: true
+
+  - param: EMAIL_COLLECTION
+    label: Emails documents collection
+    description: >-
+      What is the path to the collection that contains the documents used to build and send the email?
+    type: string
+    default: emails
+    validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
+    validationErrorMessage: Must be a valid Cloud Firestore collection.
+    required: true
+
+  - param: MAILERSEND_API_KEY
+    label: MailerSend API key
+    type: secret
+    description: >-
+      API tokens are used for authentication when sending emails. You can find more details how to create MailerSend API token [here](https://www.mailersend.com/help/managing-api-tokens).
+    example: eyJ*******************************
+    required: true
+
+  - param: DEFAULT_FROM_EMAIL
+    label: Default FROM email address
+    description: >-
+      The email address to use as the sender's address (if it's not specified in the added email document or template).
+    type: string
+    example: email@example.com
+    validationRegex: "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$"
+    validationErrorMessage: Must be a valid email address or valid name plus email address
+    required: false
+
+  - param: DEFAULT_FROM_NAME
+    label: Default FROM name
+    description: >-
+      The name to use as the sender's name.
+    type: string
+    example: John doe
+    required: false
+
+  - param: DEFAULT_REPLY_TO_EMAIL
+    label: Default reply to email address
+    description: >-
+      The email address to use as the reply to address (if it's not specified in the added email document or template).
+    type: string
+    example: email@example.com
+    validationRegex: "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$"
+    validationErrorMessage: Must be a valid email address or valid name plus email address
+    required: false
+
+  - param: DEFAULT_REPLY_TO_NAME
+    label: Default reply to name
+    description: >-
+      The name to use as the reply to name.
+    type: string
+    example: John doe
+    required: false
+
+  - param: DEFAULT_TEMPLATE_ID
+    label: Default template ID
+    description: >-
+      The default template id to use for emails (it will be used if not specified in the added email document).
+    type: string
+    example: o65qngk2vn3gwr12
+    required: false
+

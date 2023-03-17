@@ -1,0 +1,21 @@
+{
+  "functions": {
+    "source": "../",
+    "runtime": "nodejs16"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8088
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  },
+  "extensions": {
+    "mailersend-firebase": "../.."
+  }
+}
