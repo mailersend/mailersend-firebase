@@ -1,6 +1,6 @@
 {
   "functions": {
-    "source": "../",
+    "path": "../",
     "runtime": "nodejs16"
   },
   "emulators": {

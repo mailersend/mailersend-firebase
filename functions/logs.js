@@ -17,9 +17,6 @@
 const { logger } = require("firebase-functions");
 
 module.exports = {
-    init: (config) => {
-        logger.log("Initializing extension with configuration", config);
-    },
     start: () => {
         logger.log("Starting sending email");
     },

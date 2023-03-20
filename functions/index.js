@@ -22,8 +22,6 @@ const logs = require('./logs');
 let initialized = false;
 let mailersend = null;
 
-logs.init(config);
-
 const initialize = () => {
   if (initialized === true) return;
   initialized = true;
