@@ -1,4 +1,12 @@
-Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
+# Send email with MailerSend
+
+**Author**: MailerSend (**[https://www.mailersend.com](https://www.mailersend.com)**)
+
+**Description**: Send transactional emails using MailerSend.
+
+
+
+**Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
 
 Adding a document triggers this extension to send an email built from the document's fields.
 
@@ -119,3 +127,30 @@ This extension uses other Firebase or Google Cloud Platform services which may h
 - Cloud Functions
 
 When you use Firebase Extensions, you're only charged for the underlying resources that you use. A paid-tier billing plan is only required if the extension uses a service that requires a paid-tier plan, for example calling to a Google Cloud Platform API or making outbound network requests to non-Google services. All Firebase services offer a free tier of usage. [Learn more about Firebase billing.](https://firebase.google.com/pricing)
+
+
+
+
+**Configuration Parameters:**
+
+* Cloud Functions location: Where do you want to deploy the functions created for this extension? For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
+
+* Emails documents collection: What is the path to the collection that contains the documents used to build and send the email?
+
+* MailerSend API key: API tokens are used for authentication when sending emails. You can find more details how to create MailerSend API token [here](https://www.mailersend.com/help/managing-api-tokens).
+
+* Default FROM email address: The email address to use as the sender's address (if it's not specified in the added email document or template).
+
+* Default FROM name: The name to use as the sender's name.
+
+* Default reply to email address: The email address to use as the reply to address (if it's not specified in the added email document or template).
+
+* Default reply to name: The name to use as the reply to name.
+
+* Default template ID: The default template id to use for emails (it will be used if not specified in the added email document).
+
+
+
+**Cloud Functions:**
+
+* **processDocumentCreated:** Processes created document in Cloud Firestore collection, sends an email and updates status information.
