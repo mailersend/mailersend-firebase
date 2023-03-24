@@ -16,7 +16,7 @@
     "mocha": "mocha '**/*.spec.js'",
     "test": "(cd integration-tests && firebase emulators:exec 'npm run mocha' -P demo-test)",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
-    "serve": "cd integration-tests && firebase emulators:start --project=demo-test",
+    "serve": "cd integration-tests && firebase emulators:start --project=mailersend-214215",
     "lint": "eslint"
   },
   "private": true
