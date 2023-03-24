@@ -7,14 +7,7 @@
     "firebase-functions": "^4.2.0",
     "mailersend": "^2.0.5"
   },
-  "devDependencies": {
-    "axios": "^1.3.2",
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0"
-  },
   "scripts": {
-    "mocha": "mocha '**/*.spec.js'",
-    "test": "(cd integration-tests && firebase emulators:exec 'npm run mocha' -P demo-test)",
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "serve": "cd integration-tests && firebase emulators:start --project=mailersend-214215",
     "lint": "eslint"
