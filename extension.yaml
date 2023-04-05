@@ -1,16 +1,16 @@
 name: mailersend-firebase
-version: 0.0.1
+version: 0.1.0
 specVersion: v1beta
 
 displayName: Send email with MailerSend
-
 description: >-
   Send transactional emails using MailerSend.
+icon: mailersend.png
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/mailersend/firebase-ext
-releaseNotesUrl: https://github.com/mailersend/firebase-ext/CHANGELOG.md
+sourceUrl: https://github.com/mailersend/mailersend-firebase
+releaseNotesUrl: https://github.com/mailersend/mailersend-firebase/CHANGELOG.md
 
 author:
   authorName: MailerSend
@@ -19,6 +19,8 @@ author:
 contributors:
   - authorName: Ramunas Pabreza
     email: ramunas@mailerlite.com
+  - authorName: Tautvydas Tijunaitis
+    email: tautvydas@mailerlite.com    
 
 billingRequired: true
 
