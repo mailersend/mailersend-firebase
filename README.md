@@ -1,16 +1,68 @@
-# Send email with MailerSend
+# Send emails with MailerSend
 
-**Author**: MailerSend (**[https://www.mailersend.com](https://www.mailersend.com)**)
+**Author**: [MailerSend](https://www.mailersend.com)
 
-**Description**: Send transactional emails using MailerSend.
+**Description**: MailerSend is a transactional messaging service that enables developers to work faster and smarter.
+
+An intuitively designed interface enables anyone to contribute to transactional email and SMS, while advanced sending infrastructure and flexible payment plans let you scale your sendings.
+
+Built by deliverability experts, your messages always get delivered, along with dedicated IP, email verification and inbound routing for a comprehensive solution.
+
+Get started for free!
+
+**Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection. Adding a document triggers this extension to send an email built from the document's fields.
+
+Note that MailerSend allows you to:
+- schedule emails
+- send bulk emails
+- add attachments up to 25MB
+- organize your sendings with tags
+- track opens, clicks, and spam reports.
+
+We welcome [bug reports and feature requests](https://github.com/mailersend/mailersend-firebase/issues/new) as well as pull requests in this GitHub repository.
+
+##### Table of Contents  
+
+  * [🧩 Install this extension](#-install-this-extension)
+    + [Console](#console)
+    + [Firebase CLI](#firebase-cli)
+  * [💪 Use the extension](#-use-the-extension)
+    + [Send an email](#send-an-email)
+    + [Additional setup](#additional-setup)
+    + [Collection fields](#collection-fields)
+    + [Email results](#email-results)
+  * [💳 Billing](#-billing)
+  * [⚙️ Configuration](#-configuration)
+    + [Configuration parameters](#configuration-parameters)
+    + [Cloud Functions](#cloud-functions)
+---
+
+## 🧩 Install this extension
+
+### Console
+
+[![Install this extension in your Firebase project](https://www.gstatic.com/mobilesdk/210513_mobilesdk/install-extension.png "Install this extension in your Firebase project")][install-link]
+
+[install-link]: https://console.firebase.google.com/project/_/extensions/install?ref=mailersend/mailersend-email
+
+### Firebase CLI
+
+```bash
+firebase ext:install mailersend/mailersend-email --project=[your-project-id]
+```
+
+> Learn more about installing extensions in the Firebase Extensions documentation:
+> [console](https://firebase.google.com/docs/extensions/install-extensions?platform=console),
+> [CLI](https://firebase.google.com/docs/extensions/install-extensions?platform=cli)
 
 
+## 💪 Use the extension
 
-**Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
+After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
 
-Adding a document triggers this extension to send an email built from the document's fields.
-
-Here's a basic example document write that would trigger this extension:
+### Send an email
+<details>
+<summary>Here's a basic example document write that would trigger this extension</summary>
 
 ```js
 admin.firestore().collection('emails').add({
@@ -67,12 +119,26 @@ admin.firestore().collection('emails').add({
     send_at: '123465789'
 })
 ```
-# Using the extension
 
-After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
+</details>
 
-#### Collection fields
+### Additional setup
 
+Before installing this extension, set up the following Firebase service in your Firebase project:
+
+- [Cloud Firestore](https://firebase.google.com/docs/firestore/quickstart) collection in your Firebase project.
+
+Then, in the MailerSend dashboard:
+
+- Add a [domain](https://app.mailersend.com/domains) and verify it editing your DNS records.
+- Create a new [API token](https://app.mailersend.com/api-tokens) with full access.
+
+
+
+### Collection fields
+
+<details>
+<summary>Find all the JSON field parameters you can add to your API call </summary>
 _JSON parameters are provided in dot notation_
 
 | JSON field parameter                | Type       | Required | Limitations                                                       | Details                                                                                                                                                                                                       |
@@ -105,11 +171,13 @@ _JSON parameters are provided in dot notation_
 | `personalization`                   | `object[]` | no       |                                                                   | Allows using personalization in <code v-pre>{{ var }}</code> syntax. Can be used in the `subject`, `html`, `text` fields. Read more about [advanced personalization](features.html#advanced-personalization). |
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
-| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                              |
+| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
-#### Email results
+</details>
 
-After email sending is triggered this extension fills results into `delivery` field.
+### Email results
+
+After email sending is triggered this extension fills results into the `delivery` field.
 
 | Field      | Description                                    |
 |------------|------------------------------------------------|
@@ -119,7 +187,7 @@ After email sending is triggered this extension fills results into `delivery` fi
 
 
 <!-- We recommend keeping the following section to explain how billing for Firebase Extensions works -->
-# Billing
+## 💳 Billing
 
 This extension uses other Firebase or Google Cloud Platform services which may have associated charges:
 
@@ -128,29 +196,35 @@ This extension uses other Firebase or Google Cloud Platform services which may h
 
 When you use Firebase Extensions, you're only charged for the underlying resources that you use. A paid-tier billing plan is only required if the extension uses a service that requires a paid-tier plan, for example calling to a Google Cloud Platform API or making outbound network requests to non-Google services. All Firebase services offer a free tier of usage. [Learn more about Firebase billing.](https://firebase.google.com/pricing)
 
+This extension also uses the following third-party services:
 
+- MailerSend ([pricing information](https://mailersend.com/pricing))
 
+You are responsible for any costs associated with your use of these services.
 
-**Configuration Parameters:**
+## ⚙️ Configuration
+
+### Configuration Parameters
 
 * Cloud Functions location: Where do you want to deploy the functions created for this extension? For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
 * Emails documents collection: What is the path to the collection that contains the documents used to build and send the email?
 
-* MailerSend API key: API tokens are used for authentication when sending emails. You can find more details how to create MailerSend API token [here](https://www.mailersend.com/help/managing-api-tokens).
+* MailerSend API key: API tokens are used for authentication when sending emails. You can find more details how to create an API token [here](https://www.mailersend.com/help/managing-api-tokens).
+* Email parameters:
 
-* Default FROM email address: The email address to use as the sender's address (if it's not specified in the added email document or template).
+    + Default FROM email address: The email address to use as the sender's address (if it's not specified in the added email document or template).
 
-* Default FROM name: The name to use as the sender's name.
+    + Default FROM name: The name to use as the sender's name.
 
-* Default reply to email address: The email address to use as the reply to address (if it's not specified in the added email document or template).
+    + Default reply to email address: The email address to use as the reply to address (if it's not specified in the added email document or template).(not required)
 
-* Default reply to name: The name to use as the reply to name.
+    + Default reply to name: The name to use as the reply to name. (not required)
 
-* Default template ID: The default template id to use for emails (it will be used if not specified in the added email document).
+    + Default template ID: The default template id to use for emails (it will be used if not specified in the added email document).
 
 
 
-**Cloud Functions:**
+### Cloud Functions
 
-* **processDocumentCreated:** Processes created document in Cloud Firestore collection, sends an email and updates status information.
+* processDocumentCreated: Processes created document in Cloud Firestore collection, sends an email and updates status information.
