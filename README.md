@@ -2,8 +2,13 @@
 
 **Author**: MailerSend (**[https://www.mailersend.com](https://www.mailersend.com)**)
 
-**Description**: Send transactional emails using MailerSend.
+**Description**: MailerSend is a transactional messaging service that enables developers to work faster and smarter.
 
+An intuitively designed interface enables anyone to contribute to transactional email and SMS, while advanced sending infrastructure and flexible payment plans let you scale your sendings.
+
+Built by deliverability experts, your messages always get delivered, along with dedicated IP, email verification and inbound routing for a comprehensive solution.
+
+Get started right now for free!
 
 
 **Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
