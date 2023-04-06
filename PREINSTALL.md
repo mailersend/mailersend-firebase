@@ -63,6 +63,12 @@ admin.firestore().collection('emails').add({
 
 After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
 
+# Additional setup
+
+Before installing this extension, make sure that you've set up a Cloud Firestore collection in your Firebase project.
+
+You must also have a MailerSend account set up before installing this extension. You can do so on the [MailerSend](https://mailersend.com) site.
+
 #### Collection fields
 
 _JSON parameters are provided in dot notation_
@@ -117,5 +123,11 @@ This extension uses other Firebase or Google Cloud Platform services which may h
 
 <!-- List all products the extension interacts with -->
 - Cloud Functions
+
+This extension also uses the following third-party services:
+
+- MailerSend [pricing information](https://mailersend.com/pricing)
+
+You are responsible for any costs associated with your use of these services.
 
 When you use Firebase Extensions, you're only charged for the underlying resources that you use. A paid-tier billing plan is only required if the extension uses a service that requires a paid-tier plan, for example calling to a Google Cloud Platform API or making outbound network requests to non-Google services. All Firebase services offer a free tier of usage. [Learn more about Firebase billing.](https://firebase.google.com/pricing)
