@@ -1,14 +1,17 @@
-# Send email with MailerSend
+# Send emails with MailerSend
 
-**Author**: MailerSend (**[https://www.mailersend.com](https://www.mailersend.com)**)
+**Author**: [MailerSend](https://www.mailersend.com)
 
-**Description**: Send transactional emails using MailerSend.
+**Description**: Send transactional emails using MailerSend. MailerSend is a comprehensive tool for your everyday business: send invoices, delivery updates, and forgotten password links in seconds, without even thinking about it. Sign up, add your domain, and you're set to send! MailerSend integrates quickly into your tech stack, scales with your sendings, and ensures that your emails get delivered.
 
 
 
-**Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
+**Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection. Adding a document triggers this extension to send an email built from the document's fields.
 
-Adding a document triggers this extension to send an email built from the document's fields.
+We welcome [bug reports and feature requests](https://github.com/mailersend/mailersend-firebase/issues/new) as well as pull requests in this GitHub repository.
+
+
+---
 
 Here's a basic example document write that would trigger this extension:
 
