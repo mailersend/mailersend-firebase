@@ -8,6 +8,10 @@ An intuitively designed interface enables anyone to contribute to transactional 
 
 Built by deliverability experts, your messages always get delivered, along with dedicated IP, email verification and inbound routing for a comprehensive solution.
 
+Get started right now for free!
+
+Built by deliverability experts, your messages always get delivered, along with dedicated IP, email verification and inbound routing for a comprehensive solution.
+
 Get started for free!
 
 **Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection. Adding a document triggers this extension to send an email built from the document's fields.
