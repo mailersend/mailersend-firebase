@@ -9,14 +9,27 @@ Learn more in the docs: https://firebase.google.com/docs/extensions/alpha/create
 Learn more about writing a POSTINSTALL.md file in the docs:
 https://firebase.google.com/docs/extensions/alpha/create-user-docs#writing-postinstall
 -->
+##### Table of Contents  
 
-# See it in action
+  * [💪 Use the extension](#-use-the-extension)
+    + [Send an email](#send-an-email)
+    + [Additional setup](#additional-setup)
+    + [Collection fields](#collection-fields)
+    + [Email results](#email-results)
+  * [👀 Monitoring](#-monitoring)
+
+---
+
+## 💪 Use the extension
 
 Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
 
-Adding a document triggers this extension to send an email built from the document's fields.
+After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data. Adding a document triggers this extension to send an email built from the document's fields.
 
-Here's a basic example document write that would trigger this extension:
+
+### Send an email
+<details>
+<summary>Here's a basic example document write that would trigger this extension</summary>
 
 ```js
 admin.firestore().collection('emails').add({
@@ -73,12 +86,26 @@ admin.firestore().collection('emails').add({
     send_at: '123465789'
 })
 ```
-# Using the extension
 
-After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
+</details>
 
-#### Collection fields
+### Additional setup
 
+Before installing this extension, set up the following Firebase service in your Firebase project:
+
+- [Cloud Firestore](https://firebase.google.com/docs/firestore/quickstart) collection in your Firebase project.
+
+Then, in the MailerSend dashboard:
+
+- Add a [domain](https://app.mailersend.com/domains) and verify it editing your DNS records.
+- Create a new [API token](https://app.mailersend.com/api-tokens) with full access.
+
+
+
+### Collection fields
+
+<details>
+<summary>Find all the JSON field parameters you can add to your API call </summary>
 _JSON parameters are provided in dot notation_
 
 | JSON field parameter                | Type       | Required | Limitations                                                       | Details                                                                                                                                                                                                       |
@@ -111,11 +138,13 @@ _JSON parameters are provided in dot notation_
 | `personalization`                   | `object[]` | no       |                                                                   | Allows using personalization in <code v-pre>{{ var }}</code> syntax. Can be used in the `subject`, `html`, `text` fields. Read more about [advanced personalization](features.html#advanced-personalization). |
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
-| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                              |
+| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
-#### Email results
+</details>
 
-After email sending is triggered this extension fills results into `delivery` field.
+### Email results
+
+After email sending is triggered this extension fills results into the `delivery` field.
 
 | Field      | Description                                    |
 |------------|------------------------------------------------|
@@ -124,6 +153,7 @@ After email sending is triggered this extension fills results into `delivery` fi
 | state      | State of an email sending: `ERROR`, `SUCCESS`  |
 
 
-# Monitoring
+
+## 👀 Monitoring
 
 As a best practice, you can [monitor the activity](https://firebase.google.com/docs/extensions/manage-installed-extensions#monitor) of your installed extension, including checks on its health, usage, and logs.
