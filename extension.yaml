@@ -1,4 +1,4 @@
-name: mailersend-firebase
+name: mailersend-email
 version: 0.1.0
 specVersion: v1beta
 
@@ -112,7 +112,7 @@ params:
       The email address to use as the sender's address (if it's not specified in the added email document or template).
     type: string
     example: email@example.com
-    validationRegex: "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$"
+    validationRegex: ^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$
     validationErrorMessage: Must be a valid email address or valid name plus email address
     required: false
 
@@ -130,7 +130,7 @@ params:
       The email address to use as the reply to address (if it's not specified in the added email document or template).
     type: string
     example: email@example.com
-    validationRegex: "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$"
+    validationRegex: ^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-.]+.[a-zA-Z0-9-]+$
     validationErrorMessage: Must be a valid email address or valid name plus email address
     required: false
 
