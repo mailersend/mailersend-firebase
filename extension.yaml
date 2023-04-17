@@ -24,6 +24,10 @@ contributors:
 
 billingRequired: true
 
+roles:
+  - role: datastore.user
+    reason: Allows this extension to access Cloud Firestore to read and process added email documents.
+
 resources:
   - name: processDocumentCreated
     type: firebaseextensions.v1beta.function
