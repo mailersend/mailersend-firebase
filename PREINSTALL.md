@@ -1,3 +1,17 @@
+# Setup
+
+Before installing this extension, set up the following Firebase service in your Firebase project:
+
+- [Cloud Firestore](https://firebase.google.com/docs/firestore/quickstart) collection in your Firebase project.
+
+Then, in the MailerSend dashboard:
+
+- Add a [domain](https://app.mailersend.com/domains) and verify it editing your DNS records.
+- Create a new [API token](https://app.mailersend.com/api-tokens) with full access.
+
+
+# Using the extension
+
 Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection.
 
 Adding a document triggers this extension to send an email built from the document's fields.
@@ -59,9 +73,11 @@ admin.firestore().collection('emails').add({
     send_at: '123465789'
 })
 ```
-# Using the extension
 
 After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
+
+
+
 
 #### Collection fields
 
