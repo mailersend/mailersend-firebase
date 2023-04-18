@@ -13,7 +13,6 @@ https://firebase.google.com/docs/extensions/alpha/create-user-docs#writing-posti
 
   * [💪 Use the extension](#-use-the-extension)
     + [Send an email](#send-an-email)
-    + [Additional setup](#additional-setup)
     + [Collection fields](#collection-fields)
     + [Email results](#email-results)
   * [👀 Monitoring](#-monitoring)
