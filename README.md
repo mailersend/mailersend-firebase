@@ -142,13 +142,13 @@ Then, in the MailerSend dashboard:
 ### Collection fields
 
 <details>
-<summary>Find all the JSON field parameters you can add to your API call </summary>
-_JSON parameters are provided in dot notation_
+<summary>Find all the JSON field parameters you can add to your API call, provided in dot notation </summary>
+<br>
 
 | JSON field parameter                | Type       | Required | Limitations                                                       | Details                                                                                                                                                                                                       |
 |-------------------------------------|------------|----------|-------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `from`                              | `object`   | yes *    |                                                                   | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
-| `from.email`                        | `string`   | yes *    | Must be a verified domain or a subdomain from a verified domain . | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
+| `from.email`                        | `string`   | yes *    | Must be a verified domain or subdomain. | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
 | `from.name`                         | `string`   | no       |                                                                   | `from.email` will be used if not provided or, if set in extension config or `template_id` is present with default values, the default subject from that will be used.                                         |
 | `to`                                | `object[]` | yes      | Min `1`, max `50`                                                 |                                                                                                                                                                                                               |
 | `to.*.email`                        | `string`   | yes      |                                                                   |                                                                                                                                                                                                               |
