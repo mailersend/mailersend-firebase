@@ -89,24 +89,12 @@ admin.firestore().collection('emails').add({
 
 </details>
 
-### Additional setup
-
-Before installing this extension, set up the following Firebase service in your Firebase project:
-
-- [Cloud Firestore](https://firebase.google.com/docs/firestore/quickstart) collection in your Firebase project.
-
-Then, in the MailerSend dashboard:
-
-- Add a [domain](https://app.mailersend.com/domains) and verify it editing your DNS records.
-- Create a new [API token](https://app.mailersend.com/api-tokens) with full access.
-
-
 
 ### Collection fields
 
 <details>
-<summary>Find all the JSON field parameters you can add to your API call </summary>
-_JSON parameters are provided in dot notation_
+<summary>Find all the JSON field parameters you can add to your API call, provided in dot notation </summary>
+
 
 | JSON field parameter                | Type       | Required | Limitations                                                       | Details                                                                                                                                                                                                       |
 |-------------------------------------|------------|----------|-------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
