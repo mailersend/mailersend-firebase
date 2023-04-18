@@ -77,14 +77,16 @@ admin.firestore().collection('emails').add({
 
 After its installation, this extension monitors all document writes to the `EMAIL_COLLECTION` collection. Email is sent based on the contents of the document's fields. The document's fields specify an email data.
 
-#### Collection fields
+### Collection fields
 
-_JSON parameters are provided in dot notation_
+JSON field parameters you can add to your API call, provided in dot notation
+<br>
+
 
 | JSON field parameter                | Type       | Required | Limitations                                                       | Details                                                                                                                                                                                                       |
 |-------------------------------------|------------|----------|-------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `from`                              | `object`   | yes *    |                                                                   | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
-| `from.email`                        | `string`   | yes *    | Must be a verified domain or a subdomain from a verified domain . | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
+| `from.email`                        | `string`   | yes *    | Must be a verified domain or subdomain. | Not required if set in extension config or `template_id` is present and template has default sender set.                                                                                                      |
 | `from.name`                         | `string`   | no       |                                                                   | `from.email` will be used if not provided or, if set in extension config or `template_id` is present with default values, the default subject from that will be used.                                         |
 | `to`                                | `object[]` | yes      | Min `1`, max `50`                                                 |                                                                                                                                                                                                               |
 | `to.*.email`                        | `string`   | yes      |                                                                   |                                                                                                                                                                                                               |
@@ -111,7 +113,9 @@ _JSON parameters are provided in dot notation_
 | `personalization`                   | `object[]` | no       |                                                                   | Allows using personalization in <code v-pre>{{ var }}</code> syntax. Can be used in the `subject`, `html`, `text` fields. Read more about [advanced personalization](features.html#advanced-personalization). |
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
-| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                              |
+| `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
+
+
 
 #### Email results
 
