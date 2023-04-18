@@ -1,5 +1,5 @@
 name: mailersend-email
-version: 0.1.1
+version: 0.1.2
 specVersion: v1beta
 
 displayName: Send email with MailerSend
@@ -23,6 +23,10 @@ contributors:
     email: tautvydas@mailerlite.com    
 
 billingRequired: true
+
+roles:
+  - role: datastore.user
+    reason: Required to update emails in collection that have failed to send
 
 resources:
   - name: processDocumentCreated
