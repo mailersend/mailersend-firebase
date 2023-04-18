@@ -10,10 +10,6 @@ Built by deliverability experts, your messages always get delivered, along with 
 
 Get started right now for free!
 
-Built by deliverability experts, your messages always get delivered, along with dedicated IP, email verification and inbound routing for a comprehensive solution.
-
-Get started for free!
-
 **Details**: Use this extension to send emails that contain the information from documents added to a specified Cloud Firestore collection. Adding a document triggers this extension to send an email built from the document's fields.
 
 Note that MailerSend allows you to:
@@ -36,7 +32,7 @@ We welcome [bug reports and feature requests](https://github.com/mailersend/mail
     + [Collection fields](#collection-fields)
     + [Email results](#email-results)
   * [💳 Billing](#-billing)
-  * [⚙️ Configuration](#-configuration)
+  * [⚙️ Configuration](#configuration)
     + [Configuration parameters](#configuration-parameters)
     + [Cloud Functions](#cloud-functions)
 ---
@@ -206,7 +202,7 @@ This extension also uses the following third-party services:
 
 You are responsible for any costs associated with your use of these services.
 
-## ⚙️ Configuration
+## ⚙️Configuration
 
 ### Configuration Parameters
 
