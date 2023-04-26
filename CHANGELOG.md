@@ -1,3 +1,7 @@
+## Version 0.1.4
+
+- Add extension tags
+
 ## Version 0.1.3
 
 - Documentation update
