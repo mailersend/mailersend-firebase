@@ -10,7 +10,8 @@
   "scripts": {
     "generate-readme": "firebase ext:info .. --markdown > ../README.md",
     "serve": "cd integration-tests && firebase emulators:start --project=mailersend-214215",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build": ""
   },
   "private": true
 }
