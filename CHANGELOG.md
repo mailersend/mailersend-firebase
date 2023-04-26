@@ -1,3 +1,7 @@
+## Version 0.1.5
+
+- Prepare for publishing
+
 ## Version 0.1.4
 
 - Add extension tags
