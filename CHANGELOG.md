@@ -1,3 +1,7 @@
+## Version 0.1.6
+
+- Adjust PREINSTALL.md according to review comments
+
 ## Version 0.1.5
 
 - Prepare for publishing
