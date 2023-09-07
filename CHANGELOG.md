@@ -1,3 +1,7 @@
+## Version 0.1.7
+
+- Fixed undefined message id issue
+
 ## Version 0.1.6
 
 - Adjust PREINSTALL.md according to review comments
