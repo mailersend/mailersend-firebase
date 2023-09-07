@@ -26,6 +26,7 @@ const initialize = () => {
   if (initialized === true) return;
   initialized = true;
   admin.initializeApp();
+  admin.firestore().settings({ignoreUndefinedProperties:true});
   mailersend = new MailerSend({
     apiKey: config.mailersendApiToken,
   })
@@ -109,13 +110,34 @@ const send = async (data) => {
   return await mailersend.email.send(emailParams)
       .then(async (response) => {
         if (response.statusCode === 202) {
-          return response.headers['x-message-id'];
+          return {
+            status: 202,
+            messageId: response.headers && response.headers['x-message-id'] || ''
+          };
+        }
+
+        if (response.statusCode === 422) {
+          return {
+            status: 422,
+            message: response.data && response.data.message || ''
+          };
+        }
+
+        if (response.statusCode === 429) {
+          return {
+            status: 429,
+            message: response.data && response.data.message || ''
+          };
         }
 
         throw new Error('Something went wrong.');
       }).catch((error) => {
         const errorBody = error.body
-        throw new Error(errorBody.message)
+
+        return {
+          status: error.status,
+          message: errorBody || ''
+        };
       })
 }
 
@@ -160,9 +182,14 @@ exports.processDocumentCreated = functions.firestore.document(config.emailCollec
   try {
     data = prepareData(data)
 
-    const messageId = await send(data);
-    update["delivery.state"] = "SUCCESS";
-    update["delivery.message_id"] = messageId;
+    const result = await send(data);
+    if (result.status === 202) {
+      update["delivery.state"] = "SUCCESS";
+      update["delivery.message_id"] = result.messageId || '';
+    } else {
+      update["delivery.state"] = "ERROR";
+      update["delivery.error"] = result.message;
+    }
   } catch (e) {
     update["delivery.state"] = "ERROR";
     update["delivery.error"] = e.toString();
