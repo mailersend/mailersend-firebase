@@ -1,3 +1,7 @@
+## Version 0.1.8
+
+- Bump minimum runtime to nodejs18
+
 ## Version 0.1.7
 
 - Fixed undefined message id issue
