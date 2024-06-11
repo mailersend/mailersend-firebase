@@ -36,7 +36,7 @@ resources:
       Processes created document in Cloud Firestore collection, sends an email and updates status information.
     properties:
       location: ${LOCATION}
-      runtime: "nodejs16"
+      runtime: "nodejs18"
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.create
         resource: projects/${PROJECT_ID}/databases/(default)/documents/${EMAIL_COLLECTION}/{documentId}
