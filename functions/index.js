@@ -107,6 +107,14 @@ const send = async (data) => {
     emailParams.setSendAt(data.send_at)
   }
 
+  if(data.in_reply_to) {
+    emailParams.setInReplyTo(data.in_reply_to)
+  }
+
+  if(data.precedence_bulk){
+    emailParams.setPrecedenceBulk(data.precedence_bulk)
+  }
+
   return await mailersend.email.send(emailParams)
       .then(async (response) => {
         if (response.statusCode === 202) {

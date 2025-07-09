@@ -1,7 +1,7 @@
 {
   "functions": {
     "path": "../",
-    "runtime": "nodejs16"
+    "runtime": "nodejs22"
   },
   "emulators": {
     "functions": {
