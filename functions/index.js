@@ -8,7 +8,7 @@
  * https://firebase.google.com/docs/extensions/alpha/overview
  */
 
-const functions = require('firebase-functions');
+const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 const admin = require('firebase-admin');
 
 const Recipient = require("mailersend").Recipient;
@@ -86,10 +86,6 @@ const send = async (data) => {
     emailParams.setTemplateId(data.template_id)
   }
 
-  if (data.variables) {
-    emailParams.setVariables(data.variables);
-  }
-
   if (data.personalization) {
     emailParams.setPersonalization(data.personalization);
   }
@@ -105,6 +101,18 @@ const send = async (data) => {
 
   if (data.send_at) {
     emailParams.setSendAt(data.send_at)
+  }
+
+  if(data.in_reply_to) {
+    emailParams.setInReplyTo(data.in_reply_to)
+  }
+
+  if(data.precedence_bulk){
+    emailParams.setPrecedenceBulk(data.precedence_bulk)
+  }
+
+  if(data.list_unsubscribe) {
+    emailParams.setListUnsubscribe(data.list_unsubscribe)
   }
 
   return await mailersend.email.send(emailParams)
@@ -169,34 +177,41 @@ const prepareData = (data) => {
   return data
 }
 
-exports.processDocumentCreated = functions.firestore.document(config.emailCollection).onCreate(async (snapshot) => {
-  logs.start()
-  initialize()
+exports.processDocumentCreated = onDocumentCreated(config.emailCollection, async (event) => {
+    logs.start()
+    initialize()
 
-  let data = snapshot.data()
-  const update = {
-    "delivery.error": null,
-    "delivery.message_id": null,
-  };
+    const snapshot = event.data;
 
-  try {
-    data = prepareData(data)
-
-    const result = await send(data);
-    if (result.status === 202) {
-      update["delivery.state"] = "SUCCESS";
-      update["delivery.message_id"] = result.messageId || '';
-    } else {
-      update["delivery.state"] = "ERROR";
-      update["delivery.error"] = result.message;
+    if (!snapshot) {
+      logs.error("No data associated with the event");
+      return;
     }
-  } catch (e) {
-    update["delivery.state"] = "ERROR";
-    update["delivery.error"] = e.toString();
-    logs.error(e);
-  }
 
-  await snapshot.ref.update(update)
+    let data = snapshot.data()
+    const update = {
+      "delivery.error": null,
+      "delivery.message_id": null,
+    };
 
-  logs.end(update)
+    try {
+      data = prepareData(data)
+
+      const result = await send(data);
+      if (result.status === 202) {
+        update["delivery.state"] = "SUCCESS";
+        update["delivery.message_id"] = result.messageId || '';
+      } else {
+        update["delivery.state"] = "ERROR";
+        update["delivery.error"] = result.message;
+      }
+    } catch (e) {
+      update["delivery.state"] = "ERROR";
+      update["delivery.error"] = e.toString();
+      logs.error(e);
+    }
+
+    await snapshot.ref.update(update)
+
+    logs.end(update)
 })
