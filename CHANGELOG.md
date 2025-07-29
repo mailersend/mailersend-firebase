@@ -1,3 +1,10 @@
+## Version 0.2.0
+
+- Bump minimum runtime to nodejs22
+- Migrate from firebase v1 to v2
+- Add in_reply_to and precedence_bulk params
+- Remove simple personalization and add list_unsubscribe
+
 ## Version 0.1.8
 
 - Bump minimum runtime to nodejs18
