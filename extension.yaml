@@ -152,8 +152,6 @@ params:
         value: nam5
       - label: Europe (eur3)
         value: eur3
-      - label: United States (us-multiregion)
-        value: us
     default: us-central1
     required: true
     immutable: true
