@@ -21,7 +21,7 @@ contributors:
   - authorName: Ramunas Pabreza
     email: ramunas@mailerlite.com
   - authorName: Tautvydas Tijunaitis
-    email: tautvydas@mailerlite.com    
+    email: tautvydas@mailerlite.com
 
 billingRequired: true
 
@@ -31,15 +31,22 @@ roles:
 
 resources:
   - name: processDocumentCreated
-    type: firebaseextensions.v1beta.function
+    type: firebaseextensions.v1beta.v2function
     description: >-
       Processes created document in Cloud Firestore collection, sends an email and updates status information.
     properties:
+      buildConfig:
+        runtime: nodejs22
       location: ${LOCATION}
-      runtime: "nodejs22"
       eventTrigger:
-        eventType: providers/cloud.firestore/eventTypes/document.create
-        resource: projects/${PROJECT_ID}/databases/(default)/documents/${EMAIL_COLLECTION}/{documentId}
+        eventType: google.cloud.firestore.document.v1.created
+        triggerRegion: ${DATABASE_LOCATION}
+        eventFilters:
+          - attribute: database
+            value: (default)
+          - attribute: document
+            value: ${EMAIL_COLLECTION}/{documentId}
+            operator: match-path-pattern
 
 params:
   - param: LOCATION
@@ -90,6 +97,62 @@ params:
         value: southamerica-east1
       - label: Sydney (australia-southeast1)
         value: australia-southeast1
+    required: true
+    immutable: true
+
+  - param: DATABASE_LOCATION
+    label: Firestore Database Location
+    description: >-
+      The location of your Firestore database. 
+      For standard databases, this is usually the same as your Cloud Functions location (e.g. us-central1).
+      For multi-region databases, this might be 'nam5' or 'eur3'.
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+      - label: North America (nam5)
+        value: nam5
+      - label: Europe (eur3)
+        value: eur3
+    default: us-central1
     required: true
     immutable: true
 
@@ -154,4 +217,3 @@ params:
     type: string
     example: o65qngk2vn3gwr12
     required: false
-

@@ -8,16 +8,16 @@
  * https://firebase.google.com/docs/extensions/alpha/overview
  */
 
-const {onDocumentCreated} = require("firebase-functions/v2/firestore");
-const admin = require('firebase-admin');
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const admin = require("firebase-admin");
 
 const Recipient = require("mailersend").Recipient;
 const EmailParams = require("mailersend").EmailParams;
 const Sender = require("mailersend").Sender;
 const MailerSend = require("mailersend").MailerSend;
 
-let config = require('./config');
-const logs = require('./logs');
+let config = require("./config");
+const logs = require("./logs");
 
 let initialized = false;
 let mailersend = null;
@@ -26,64 +26,63 @@ const initialize = () => {
   if (initialized === true) return;
   initialized = true;
   admin.initializeApp();
-  admin.firestore().settings({ignoreUndefinedProperties:true});
+  admin.firestore().settings({ ignoreUndefinedProperties: true });
   mailersend = new MailerSend({
     apiKey: config.mailersendApiToken,
-  })
-}
+  });
+};
 
 const send = async (data) => {
-
   let toRecipients = [];
   if (Array.isArray(data.to)) {
     data.to.forEach((recipient) => {
-      toRecipients.push(new Recipient(recipient.email, recipient.name))
-    })
+      toRecipients.push(new Recipient(recipient.email, recipient.name));
+    });
   }
 
   let ccRecipients = [];
   if (Array.isArray(data.cc)) {
     data.cc.forEach((recipient) => {
-      ccRecipients.push(new Recipient(recipient.email, recipient.name))
-    })
+      ccRecipients.push(new Recipient(recipient.email, recipient.name));
+    });
   }
 
   let bccRecipients = [];
   if (Array.isArray(data.bcc)) {
     data.bcc.forEach((recipient) => {
-      bccRecipients.push(new Recipient(recipient.email, recipient.name))
-    })
+      bccRecipients.push(new Recipient(recipient.email, recipient.name));
+    });
   }
 
   const sentFrom = new Sender(data.from.email, data.from.name);
 
-  let emailParams = new EmailParams()
+  let emailParams = new EmailParams();
 
-  emailParams.setFrom(sentFrom)
-  emailParams.setTo(toRecipients)
+  emailParams.setFrom(sentFrom);
+  emailParams.setTo(toRecipients);
 
   if (ccRecipients.length) {
-    emailParams.setCc(ccRecipients)
+    emailParams.setCc(ccRecipients);
   }
 
   if (bccRecipients.length) {
-    emailParams.setBcc(bccRecipients)
+    emailParams.setBcc(bccRecipients);
   }
 
   if (data.subject) {
-    emailParams.setSubject(data.subject)
+    emailParams.setSubject(data.subject);
   }
 
   if (data.html) {
-    emailParams.setHtml(data.html)
+    emailParams.setHtml(data.html);
   }
 
   if (data.text) {
-    emailParams.setText(data.text)
+    emailParams.setText(data.text);
   }
 
   if (data.template_id) {
-    emailParams.setTemplateId(data.template_id)
+    emailParams.setTemplateId(data.template_id);
   }
 
   if (data.personalization) {
@@ -91,95 +90,98 @@ const send = async (data) => {
   }
 
   if (data.tags && data.tags.length) {
-    emailParams.setTags(data.tags)
+    emailParams.setTags(data.tags);
   }
 
   if (data.reply_to && data.reply_to.email) {
     const replyTo = new Sender(data.reply_to.email, data.reply_to.name);
-    emailParams.setReplyTo(replyTo)
+    emailParams.setReplyTo(replyTo);
   }
 
   if (data.send_at) {
-    emailParams.setSendAt(data.send_at)
+    emailParams.setSendAt(data.send_at);
   }
 
-  if(data.in_reply_to) {
-    emailParams.setInReplyTo(data.in_reply_to)
+  if (data.in_reply_to) {
+    emailParams.setInReplyTo(data.in_reply_to);
   }
 
-  if(data.precedence_bulk){
-    emailParams.setPrecedenceBulk(data.precedence_bulk)
+  if (data.precedence_bulk) {
+    emailParams.setPrecedenceBulk(data.precedence_bulk);
   }
 
-  if(data.list_unsubscribe) {
-    emailParams.setListUnsubscribe(data.list_unsubscribe)
+  if (data.list_unsubscribe) {
+    emailParams.setListUnsubscribe(data.list_unsubscribe);
   }
 
-  return await mailersend.email.send(emailParams)
-      .then(async (response) => {
-        if (response.statusCode === 202) {
-          return {
-            status: 202,
-            messageId: response.headers && response.headers['x-message-id'] || ''
-          };
-        }
-
-        if (response.statusCode === 422) {
-          return {
-            status: 422,
-            message: response.data && response.data.message || ''
-          };
-        }
-
-        if (response.statusCode === 429) {
-          return {
-            status: 429,
-            message: response.data && response.data.message || ''
-          };
-        }
-
-        throw new Error('Something went wrong.');
-      }).catch((error) => {
-        const errorBody = error.body
-
+  return await mailersend.email
+    .send(emailParams)
+    .then(async (response) => {
+      if (response.statusCode === 202) {
         return {
-          status: error.status,
-          message: errorBody || ''
+          status: 202,
+          messageId:
+            (response.headers && response.headers["x-message-id"]) || "",
         };
-      })
-}
+      }
+
+      if (response.statusCode === 422) {
+        return {
+          status: 422,
+          message: (response.data && response.data.message) || "",
+        };
+      }
+
+      if (response.statusCode === 429) {
+        return {
+          status: 429,
+          message: (response.data && response.data.message) || "",
+        };
+      }
+
+      throw new Error("Something went wrong.");
+    })
+    .catch((error) => {
+      const errorBody = error.body;
+
+      return {
+        status: error.status,
+        message: errorBody || "",
+      };
+    });
+};
 
 const prepareData = (data) => {
-  data.from = data.from || {}
-  data.reply_to = data.reply_to || {}
+  data.from = data.from || {};
+  data.reply_to = data.reply_to || {};
 
-  data.from.email = data.from.email || config.defaultFromEmail
-  data.from.name = data.from.name || config.defaultFromName
-  data.reply_to.email = data.reply_to.email || config.defaultReplyToEmail
-  data.reply_to.name = data.reply_to.name || config.defaultReplyToName
+  data.from.email = data.from.email || config.defaultFromEmail;
+  data.from.name = data.from.name || config.defaultFromName;
+  data.reply_to.email = data.reply_to.email || config.defaultReplyToEmail;
+  data.reply_to.name = data.reply_to.name || config.defaultReplyToName;
 
   if (!data.html && !data.text) {
-    data.template_id = data.template_id || config.defaultTemplateId
+    data.template_id = data.template_id || config.defaultTemplateId;
   }
 
   if (!data.html && !data.text && !data.template_id) {
     throw new Error(
-        "Failed to send email. At least one of html, text and template_id should be set."
+      "Failed to send email. At least one of html, text and template_id should be set."
     );
   }
 
   if (!Array.isArray(data.to) || !data.to.length) {
-    throw new Error(
-        "Failed to deliver email. Expected at least 1 recipient."
-    );
+    throw new Error("Failed to deliver email. Expected at least 1 recipient.");
   }
 
-  return data
-}
+  return data;
+};
 
-exports.processDocumentCreated = onDocumentCreated(config.emailCollection, async (event) => {
-    logs.start()
-    initialize()
+exports.processDocumentCreated = onDocumentCreated(
+  `${config.emailCollection}/{documentId}`,
+  async (event) => {
+    logs.start();
+    initialize();
 
     const snapshot = event.data;
 
@@ -188,19 +190,19 @@ exports.processDocumentCreated = onDocumentCreated(config.emailCollection, async
       return;
     }
 
-    let data = snapshot.data()
+    let data = snapshot.data();
     const update = {
       "delivery.error": null,
       "delivery.message_id": null,
     };
 
     try {
-      data = prepareData(data)
+      data = prepareData(data);
 
       const result = await send(data);
       if (result.status === 202) {
         update["delivery.state"] = "SUCCESS";
-        update["delivery.message_id"] = result.messageId || '';
+        update["delivery.message_id"] = result.messageId || "";
       } else {
         update["delivery.state"] = "ERROR";
         update["delivery.error"] = result.message;
@@ -211,7 +213,8 @@ exports.processDocumentCreated = onDocumentCreated(config.emailCollection, async
       logs.error(e);
     }
 
-    await snapshot.ref.update(update)
+    await snapshot.ref.update(update);
 
-    logs.end(update)
-})
+    logs.end(update);
+  }
+);
