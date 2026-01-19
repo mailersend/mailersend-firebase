@@ -1,3 +1,7 @@
+## Version 0.2.1
+
+- Upgrade to Cloud Functions V2 and add DATABASE_LOCATION parameters
+
 ## Version 0.2.0
 
 - Bump minimum runtime to nodejs22
