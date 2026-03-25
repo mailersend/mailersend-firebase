@@ -1,0 +1,31 @@
+name: Check Extension Version
+
+on:
+  pull_request:
+    paths:
+      - extension.yaml
+  workflow_call:
+
+jobs:
+  version_check:
+    name: Check Extension Version
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Validate CHANGELOG.md entry
+        run: |
+          VERSION=$(grep '^version:' extension.yaml | awk '{print $2}')
+          echo "Extension version: $VERSION"
+
+          if ! grep -q "## Version $VERSION" CHANGELOG.md; then
+            echo "ERROR: No changelog entry found for version $VERSION in CHANGELOG.md"
+            echo "Please add a '## Version $VERSION' section to CHANGELOG.md before publishing."
+            exit 1
+          fi
+
+          echo "Changelog entry for version $VERSION found."
