@@ -1,5 +1,5 @@
 name: mailersend-email
-version: 0.2.1
+version: 0.2.2
 specVersion: v1beta
 
 displayName: Send email with MailerSend
