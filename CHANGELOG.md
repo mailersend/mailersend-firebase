@@ -1,3 +1,7 @@
+## Version 0.2.2
+
+- Add automated workflows to publish extension
+
 ## Version 0.2.1
 
 - Upgrade to Cloud Functions V2 and add DATABASE_LOCATION parameters
