@@ -2,11 +2,8 @@ name: Publish Firebase Extension
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - extension.yaml
-  workflow_dispatch:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
 jobs:
   check_version:
