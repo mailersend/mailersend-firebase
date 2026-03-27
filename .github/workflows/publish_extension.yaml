@@ -1,0 +1,31 @@
+name: Publish Firebase Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - extension.yaml
+  workflow_dispatch:
+
+jobs:
+  check_version:
+    uses: ./.github/workflows/check_version.yaml
+
+  publish:
+    name: Publish to Firebase Extensions Hub
+    runs-on: ubuntu-24.04
+    needs: check_version
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Publish extension
+        uses: w9jds/firebase-action@master
+        with:
+          args: ext:dev:upload mailersend/mailersend-email --repo HEAD --stage stable --force
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
