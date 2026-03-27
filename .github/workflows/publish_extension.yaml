@@ -26,6 +26,6 @@ jobs:
       - name: Publish extension
         uses: w9jds/firebase-action@master
         with:
-          args: ext:dev:upload mailersend/mailersend-email --repo HEAD --stage stable --force
+          args: ext:dev:upload mailersend/mailersend-email --repo https://github.com/mailersend/mailersend-firebase --stage stable --force
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
