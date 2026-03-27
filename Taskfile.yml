@@ -1,0 +1,28 @@
+version: "3"
+
+tasks:
+  release:
+    desc: Tag and publish a new release from the current extension.yaml version
+    cmds:
+      - git checkout main
+      - git pull origin main
+      - |
+        VERSION=$(grep '^version:' extension.yaml | awk '{print $2}')
+        TAG="v$VERSION"
+
+        if git rev-parse "$TAG" >/dev/null 2>&1; then
+          echo "ERROR: Tag $TAG already exists."
+          exit 1
+        fi
+
+        NOTES=$(awk "/^## Version $VERSION/{flag=1; next} /^## Version /{flag=0} flag" CHANGELOG.md | sed '/^[[:space:]]*$/d')
+
+        if [ -z "$NOTES" ]; then
+          echo "ERROR: No changelog entry found for version $VERSION in CHANGELOG.md"
+          exit 1
+        fi
+
+        echo "Releasing $TAG..."
+        git tag "$TAG"
+        git push origin "$TAG"
+        gh release create "$TAG" --title "$TAG" --notes "$NOTES"
