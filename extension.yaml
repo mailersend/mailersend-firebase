@@ -166,6 +166,16 @@ params:
     validationErrorMessage: Must be a valid Cloud Firestore collection.
     required: true
 
+  - param: BULK_EMAIL_COLLECTION
+    label: Bulk emails documents collection
+    description: >-
+      What is the path to the collection that contains the documents used to build and send bulk emails?
+    type: string
+    default: bulk_emails
+    validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
+    validationErrorMessage: Must be a valid Cloud Firestore collection.
+    required: false
+
   - param: MAILERSEND_API_KEY
     label: MailerSend API key
     type: secret

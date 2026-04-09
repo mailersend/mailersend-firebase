@@ -14,6 +14,8 @@ https://firebase.google.com/docs/extensions/alpha/create-user-docs#writing-posti
   * [💪 Use the extension](#-use-the-extension)
     + [Send an email](#send-an-email)
     + [Collection fields](#collection-fields)
+    + [Send a bulk email](#send-a-bulk-email)
+    + [Bulk email collection fields](#bulk-email-collection-fields)
     + [Email results](#email-results)
   * [👀 Monitoring](#-monitoring)
 
@@ -131,15 +133,69 @@ admin.firestore().collection('emails').add({
 
 </details>
 
+### Send a bulk email
+
+<details>
+<summary>Here's an example document write to the bulk emails collection that would trigger a bulk send</summary>
+
+```js
+admin.firestore().collection('bulk_emails').add({
+  emails: [
+    {
+      from: { email: 'hello@mailersend.com', name: 'MailerSend' },
+      to: [{ email: 'john@mailersend.com', name: 'John Mailer' }],
+      subject: 'Hello from {{company}}!',
+      text: 'This is just a friendly hello from your friends at {{company}}.',
+      html: '<b>This is just a friendly hello from your friends at {{company}}.</b>',
+      personalization: [
+        {
+          email: 'john@mailersend.com',
+          data: { company: 'MailerSend' }
+        }
+      ]
+    },
+    {
+      from: { email: 'hello@mailersend.com', name: 'MailerSend' },
+      to: [{ email: 'jane@mailersend.com', name: 'Jane Mailer' }],
+      subject: 'Welcome to {{company}}!',
+      text: 'This is a welcoming message from your friends at {{company}}.',
+      html: '<b>This is a welcoming message from your friends at {{company}}.</b>',
+      personalization: [
+        {
+          email: 'jane@mailersend.com',
+          data: { company: 'MailerSend' }
+        }
+      ]
+    }
+  ]
+})
+```
+
+</details>
+
+
+### Bulk email collection fields
+
+<details>
+<summary>Find all the JSON field parameters for the bulk email collection</summary>
+
+| JSON field parameter    | Type       | Required | Limitations                                                                                      | Details                                                                                 |
+|-------------------------|------------|----------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `emails`                | `object[]` | yes      | Max 5 for Trial plan. Max 500 for Hobby, Starter, Professional or Enterprise plan accounts.      | Array of email objects to send in a single bulk request.                                |
+| `emails.*`              | `object`   | yes      |                                                                                                  | Each item supports the same fields as a single email document (see Collection fields).  |
+
+</details>
+
 ### Email results
 
 After email sending is triggered this extension fills results into the `delivery` field.
 
-| Field      | Description                                    |
-|------------|------------------------------------------------|
-| error      | Validation error, or error from the server     |
-| message_id | Message ID in MailerSend system                |
-| state      | State of an email sending: `ERROR`, `SUCCESS`  |
+| Field         | Description                                              |
+|---------------|----------------------------------------------------------|
+| error         | Validation error, or error from the server               |
+| message_id    | Message ID in MailerSend system (single email only)      |
+| bulk_email_id | Bulk email ID in MailerSend system (bulk email only)     |
+| state         | State of an email sending: `ERROR`, `SUCCESS`            |
 
 
 
