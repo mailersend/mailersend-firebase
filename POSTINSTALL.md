@@ -83,6 +83,11 @@ admin.firestore().collection('emails').add({
         name: 'Reply to name'
     },
     in_reply_to: 'message-id@example.com',
+    settings: {
+      track_clicks: true,
+      track_opens: true,
+      track_content: true
+    },
     send_at: '123465789'
 })
 ```
@@ -127,6 +132,8 @@ admin.firestore().collection('emails').add({
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
 | `in_reply_to`                       | `string`   | no       |                                                                   | Valid email address as per RFC 2821.                                                                                                                                                                  |
+| `settings`                          | `object`   | no       |                                                                   |                                                                                                                                                                                                               |
+| `settings.*`                        | `boolean`  | yes      |                                                                   | Can only contain the keys: `track_clicks`, `track_opens` and `track_content` and a boolean value of `true` or `false`.                                                                                        |
 | `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
 </details>
