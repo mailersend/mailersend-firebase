@@ -82,6 +82,7 @@ admin.firestore().collection('emails').add({
       email: 'reply_to@example.com',
         name: 'Reply to name'
     },
+    in_reply_to: 'message-id@example.com',
     send_at: '123465789'
 })
 ```
@@ -125,6 +126,7 @@ admin.firestore().collection('emails').add({
 | `personalization`                   | `object[]` | no       |                                                                   | Allows using personalization in <code v-pre>{{ var }}</code> syntax. Can be used in the `subject`, `html`, `text` fields. Read more about [advanced personalization](features.html#advanced-personalization). |
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
+| `in_reply_to`                       | `string`   | no       |                                                                   | Valid email address as per RFC 2821.                                                                                                                                                                  |
 | `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
 </details>
