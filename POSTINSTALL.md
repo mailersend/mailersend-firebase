@@ -58,17 +58,6 @@ admin.firestore().collection('emails').add({
   html: 'This is an <code>HTML</code> email body.',
   text: 'This is an TEXT email body.',
   template_id: 'abc123ced',
-    variables: [
-      {
-        email: 'recipient@example.com',
-        substitutions: [
-          {
-            var: 'variable_name',
-            value: 'variable value'
-          }
-        ]
-      }
-    ],
     personalization: [
       {
         email: 'recipient@example.com',
@@ -129,11 +118,6 @@ admin.firestore().collection('emails').add({
 | `html`                              | `string`   | yes *    | Max size of 2 MB.                                                 | Email represented in HTML (`text/html`) format. * Only required if there's no `text` or `template_id` present.                                                                                                |
 | `template_id`                       | `string`   | yes *    |                                                                   | * Only required if there's no `text` or `html` present.                                                                                                                                                       |
 | `tags`                              | `string[]` | no       |                                                                   | Limit is max 5 tags.                                                                                                                                                                                          |
-| `variables`                         | `object[]` | no       |                                                                   | These will be replaced in the email content using `{$var}` format. Can be used in the `subject`, `html`, `text` fields.                                                                                       |
-| `variables.*.email`                 | `string`   | yes      |                                                                   | Email address that substitutions will be applied to. Read more about [simple personalization](features.html#simple-personalization).                                                                          |
-| `variables.*.substitutions`         | `object[]` | yes      |                                                                   |                                                                                                                                                                                                               |
-| `variables.*.substitutions.*.var`   | `string`   | yes      |                                                                   | Name of the variable, will replace `{$var}` in the `subject`, `html`, `text` fields.                                                                                                                          |
-| `variables.*.substitutions.*.value` | `string`   | yes      |                                                                   | Value to be replaced, based on the `variables.*.substitutions.*.var`  name.                                                                                                                                   |
 | `personalization`                   | `object[]` | no       |                                                                   | Allows using personalization in <code v-pre>{{ var }}</code> syntax. Can be used in the `subject`, `html`, `text` fields. Read more about [advanced personalization](features.html#advanced-personalization). |
 | `personalization.*.email`           | `string`   | yes      |                                                                   | Email address that personalization will be applied to.                                                                                                                                                        |
 | `personalization.*.data`            | `object[]` | yes      |                                                                   | Object with `key: value` pairs. Values will be added to your template using <code v-pre>{{ key }}</code> syntax.                                                                                              |
