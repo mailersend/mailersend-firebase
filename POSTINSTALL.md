@@ -88,6 +88,12 @@ admin.firestore().collection('emails').add({
       track_opens: true,
       track_content: true
     },
+    headers: [
+      {
+        name: 'X-Custom-Header',
+        value: 'custom-value'
+      }
+    ],
     send_at: '123465789'
 })
 ```
@@ -134,6 +140,9 @@ admin.firestore().collection('emails').add({
 | `in_reply_to`                       | `string`   | no       |                                                                   | Valid email address as per RFC 2821.                                                                                                                                                                  |
 | `settings`                          | `object`   | no       |                                                                   |                                                                                                                                                                                                               |
 | `settings.*`                        | `boolean`  | yes      |                                                                   | Can only contain the keys: `track_clicks`, `track_opens` and `track_content` and a boolean value of `true` or `false`.                                                                                        |
+| `headers`                           | `object[]` | no       |                                                                   | Please note that this feature is available to Professional and Enterprise accounts only.                                                                                                                      |
+| `headers.*.name`                    | `string`   | yes      | Must be alphanumeric which can contain `-`                        |                                                                                                                                                                                                               |
+| `headers.*.value`                   | `string`   | yes      |                                                                   |                                                                                                                                                                                                               |
 | `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
 </details>

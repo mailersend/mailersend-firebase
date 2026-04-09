@@ -106,6 +106,14 @@ const send = async (data) => {
     emailParams.setInReplyTo(data.in_reply_to);
   }
 
+  if (data.settings) {
+    emailParams.setSettings(data.settings);
+  }
+
+  if (Array.isArray(data.headers) && data.headers.length) {
+    emailParams.headers = data.headers;
+  }
+
   if (data.precedence_bulk) {
     emailParams.setPrecedenceBulk(data.precedence_bulk);
   }
@@ -172,6 +180,16 @@ const prepareData = (data) => {
 
   if (!Array.isArray(data.to) || !data.to.length) {
     throw new Error("Failed to deliver email. Expected at least 1 recipient.");
+  }
+
+  if (Array.isArray(data.headers)) {
+    data.headers.forEach((header, index) => {
+      if (!header.name || !header.value) {
+        throw new Error(
+          `Failed to send email. Each header must have a name and value. Please check header at index ${index}.`
+        );
+      }
+    });
   }
 
   return data;
