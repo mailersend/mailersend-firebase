@@ -1,3 +1,13 @@
+## Version 0.2.3
+
+- Add `in_reply_to` parameter support
+- Add `settings` parameter support (track clicks, opens, content)
+- Add `headers` parameter support with name/value validation
+- Add `attachments` parameter support (inline and regular attachments)
+- Add bulk email support via a separate `bulk_emails` collection
+- Remove simple personalization (variables) from documentation
+- Update POSTINSTALL.md with new parameters, bulk email usage, and delivery status fields
+
 ## Version 0.2.2
 
 - Add automated workflows to publish extension
