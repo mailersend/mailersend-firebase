@@ -1,2 +1,5 @@
 .idea
 .direnv
+functions/test-trigger.js
+functions/integration-tests/extensions/*.secret.local
+functions/integration-tests/extensions/*.env.local
