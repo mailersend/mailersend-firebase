@@ -142,8 +142,8 @@ const send = async (data) => {
       if (response.statusCode === 202) {
         return {
           status: 202,
-          messageId:
-            (response.headers && response.headers["x-message-id"]) || "",
+          messageId: (response.headers && response.headers["x-message-id"]) || "",
+          warnings: (response.body && response.body.warnings) || [],
         };
       }
 
@@ -167,7 +167,7 @@ const send = async (data) => {
       const errorBody = error.body;
 
       return {
-        status: error.status,
+        status: error.statusCode,
         message: errorBody || "",
       };
     });
@@ -253,6 +253,9 @@ exports.processDocumentCreated = onDocumentCreated(
       if (result.status === 202) {
         update["delivery.state"] = "SUCCESS";
         update["delivery.message_id"] = result.messageId || "";
+        if (result.warnings && result.warnings.length) {
+          update["delivery.warnings"] = result.warnings;
+        }
       } else {
         update["delivery.state"] = "ERROR";
         update["delivery.error"] = result.message;

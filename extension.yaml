@@ -1,5 +1,5 @@
 name: mailersend-email
-version: 0.2.2
+version: 0.3.0
 specVersion: v1beta
 
 displayName: Send email with MailerSend
@@ -46,6 +46,24 @@ resources:
             value: (default)
           - attribute: document
             value: ${EMAIL_COLLECTION}/{documentId}
+            operator: match-path-pattern
+
+  - name: processBulkDocumentCreated
+    type: firebaseextensions.v1beta.v2function
+    description: >-
+      Processes created document in the bulk emails Cloud Firestore collection, sends a bulk email and updates status information.
+    properties:
+      buildConfig:
+        runtime: nodejs22
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: google.cloud.firestore.document.v1.created
+        triggerRegion: ${DATABASE_LOCATION}
+        eventFilters:
+          - attribute: database
+            value: (default)
+          - attribute: document
+            value: ${BULK_EMAIL_COLLECTION}/{documentId}
             operator: match-path-pattern
 
 params:

@@ -125,6 +125,38 @@ admin.firestore().collection('emails').add({
 
 </details>
 
+### Send an email with attachments
+
+<details>
+<summary>Here's an example with a regular attachment and an inline image</summary>
+
+```js
+admin.firestore().collection('emails').add({
+  to: [{ email: 'recipient@example.com', name: 'Recipient' }],
+  from: { email: 'from@example.com', name: 'From name' },
+  subject: 'Email with attachments',
+  html: '<p>Please find the file attached.</p><p><img src="cid:company-logo" /></p>',
+  text: 'Please find the file attached.',
+  attachments: [
+    {
+      // Regular attachment — base64-encoded file content
+      content: Buffer.from('Hello, World!').toString('base64'),
+      filename: 'hello.txt',
+      disposition: 'attachment'
+    },
+    {
+      // Inline image — referenced in HTML via cid:<id>
+      content: '<base64-encoded-image-content>',
+      filename: 'logo.png',
+      disposition: 'inline',
+      id: 'company-logo'
+    }
+  ]
+})
+```
+
+</details>
+
 ### Additional setup
 
 Before installing this extension, set up the following Firebase service in your Firebase project:
@@ -176,6 +208,11 @@ Then, in the MailerSend dashboard:
 | `headers.*.name`                    | `string`   | yes      | Must be alphanumeric which can contain `-`                        |                                                                                                                                                                                                               |
 | `headers.*.value`                   | `string`   | yes      |                                                                   |                                                                                                                                                                                                               |
 | `precedence_bulk`                   | `boolean`  | no       |                                                                   | This parameter will override domain's advanced settings.                                                                                                                                                     |
+| `attachments`                       | `object[]` | no       |                                                                   |                                                                                                                                                                                                               |
+| `attachments.*.content`             | `string`   | yes      | Max size of 25MB after decoding Base64.                           | Base64-encoded content of the attachment.                                                                                                                                                                     |
+| `attachments.*.disposition`         | `string`   | yes      | Must be one of: `inline`, `attachment`                            | Use `inline` to make it accessible for content. Use `attachment` for normal attachments.                                                                                                                      |
+| `attachments.*.filename`            | `string`   | yes      |                                                                   |                                                                                                                                                                                                               |
+| `attachments.*.id`                  | `string`   | no       |                                                                   | Can be used in content as `<img src="cid:*"/>`. Must also set `attachments.*.disposition` to `inline`.                                                                                                        |
 | `send_at`                           | `integer`  | no       | min: `now`, max: `now + 72hours`                                  | Has to be a [Unix timestamp](https://www.unixtimestamp.com/). **Please note that this timestamp is a minimal guarantee and that the email could be delayed due to server load.**                             |
 
 </details>

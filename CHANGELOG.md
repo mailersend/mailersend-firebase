@@ -1,4 +1,4 @@
-## Version 0.2.3
+## Version 0.3.0
 
 - Add `in_reply_to` parameter support
 - Add `settings` parameter support (track clicks, opens, content)
