@@ -14,6 +14,7 @@ const admin = require("firebase-admin");
 const Recipient = require("mailersend").Recipient;
 const EmailParams = require("mailersend").EmailParams;
 const Sender = require("mailersend").Sender;
+const Attachment = require("mailersend").Attachment;
 const MailerSend = require("mailersend").MailerSend;
 
 let config = require("./config");
@@ -32,7 +33,7 @@ const initialize = () => {
   });
 };
 
-const send = async (data) => {
+const buildEmailParams = (data) => {
   let toRecipients = [];
   if (Array.isArray(data.to)) {
     data.to.forEach((recipient) => {
@@ -106,6 +107,14 @@ const send = async (data) => {
     emailParams.setInReplyTo(data.in_reply_to);
   }
 
+  if (data.settings) {
+    emailParams.setSettings(data.settings);
+  }
+
+  if (Array.isArray(data.headers) && data.headers.length) {
+    emailParams.headers = data.headers;
+  }
+
   if (data.precedence_bulk) {
     emailParams.setPrecedenceBulk(data.precedence_bulk);
   }
@@ -114,14 +123,27 @@ const send = async (data) => {
     emailParams.setListUnsubscribe(data.list_unsubscribe);
   }
 
+  if (Array.isArray(data.attachments) && data.attachments.length) {
+    const attachments = data.attachments.map(
+      (a) => new Attachment(a.content, a.filename, a.disposition || "attachment", a.id)
+    );
+    emailParams.setAttachments(attachments);
+  }
+
+  return emailParams;
+};
+
+const send = async (data) => {
+  const emailParams = buildEmailParams(data);
+
   return await mailersend.email
     .send(emailParams)
     .then(async (response) => {
       if (response.statusCode === 202) {
         return {
           status: 202,
-          messageId:
-            (response.headers && response.headers["x-message-id"]) || "",
+          messageId: (response.headers && response.headers["x-message-id"]) || "",
+          warnings: (response.body && response.body.warnings) || [],
         };
       }
 
@@ -145,10 +167,28 @@ const send = async (data) => {
       const errorBody = error.body;
 
       return {
-        status: error.status,
+        status: error.statusCode,
         message: errorBody || "",
       };
     });
+};
+
+const sendBulk = async (data) => {
+  const emailParamsArray = data.emails.map((emailData) => {
+    const prepared = prepareData({ ...emailData });
+    return buildEmailParams(prepared);
+  });
+
+  return await mailersend.email
+    .sendBulk(emailParamsArray)
+    .then((response) => ({
+      status: response.statusCode,
+      bulkEmailId: response.body?.bulk_email_id || "",
+    }))
+    .catch((error) => ({
+      status: error.statusCode,
+      message: error.body || "",
+    }));
 };
 
 const prepareData = (data) => {
@@ -172,6 +212,16 @@ const prepareData = (data) => {
 
   if (!Array.isArray(data.to) || !data.to.length) {
     throw new Error("Failed to deliver email. Expected at least 1 recipient.");
+  }
+
+  if (Array.isArray(data.headers)) {
+    data.headers.forEach((header, index) => {
+      if (!header.name || !header.value) {
+        throw new Error(
+          `Failed to send email. Each header must have a name and value. Please check header at index ${index}.`
+        );
+      }
+    });
   }
 
   return data;
@@ -203,6 +253,53 @@ exports.processDocumentCreated = onDocumentCreated(
       if (result.status === 202) {
         update["delivery.state"] = "SUCCESS";
         update["delivery.message_id"] = result.messageId || "";
+        if (result.warnings && result.warnings.length) {
+          update["delivery.warnings"] = result.warnings;
+        }
+      } else {
+        update["delivery.state"] = "ERROR";
+        update["delivery.error"] = result.message;
+      }
+    } catch (e) {
+      update["delivery.state"] = "ERROR";
+      update["delivery.error"] = e.toString();
+      logs.error(e);
+    }
+
+    await snapshot.ref.update(update);
+
+    logs.end(update);
+  }
+);
+
+exports.processBulkDocumentCreated = onDocumentCreated(
+  `${config.bulkEmailCollection}/{documentId}`,
+  async (event) => {
+    logs.start();
+    initialize();
+
+    const snapshot = event.data;
+
+    if (!snapshot) {
+      logs.error("No data associated with the event");
+      return;
+    }
+
+    const data = snapshot.data();
+    const update = {
+      "delivery.error": null,
+      "delivery.bulk_email_id": null,
+    };
+
+    try {
+      if (!Array.isArray(data.emails) || !data.emails.length) {
+        throw new Error("Failed to send bulk email. Expected at least 1 email in the emails array.");
+      }
+
+      const result = await sendBulk(data);
+      if (result.status === 202) {
+        update["delivery.state"] = "SUCCESS";
+        update["delivery.bulk_email_id"] = result.bulkEmailId || "";
       } else {
         update["delivery.state"] = "ERROR";
         update["delivery.error"] = result.message;
