@@ -16,6 +16,8 @@
             go-task
             git
             gh
+            lefthook
+            gitleaks
           ];
         };
       }
